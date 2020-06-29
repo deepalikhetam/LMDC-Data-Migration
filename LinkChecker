@@ -1,0 +1,113 @@
+package DataTransfer_LMDC.Mig;
+
+import java.io.File;
+import java.io.PrintStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Date;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class LinkChecker {
+
+	private static final String strUrl = null;
+	public static WebDriver driver;
+	
+	public static void Link() throws Exception
+	{
+		   PrintStream o = new PrintStream(new File("kiran.txt")); 
+		      PrintStream console = System.out;
+		   //     System.setProperty("webdriver.gecko.driver","C:\\Users\\dkhetam47\\OneDrive\\Downloads\\geckodriver-v0.26.0-win32\\geckodriver.exe");
+
+		  //  WebDriver driver= new FirefoxDriver();
+		        
+		  //    System.setProperty("webdriver.ie.driver","C:\\Users\\dkhetam47\\OneDrive\\Downloads\\IEDriverServer_x64_3.150.1\\IEDriverServer.exe");
+
+		  //     WebDriver driver= new InternetExplorerDriver();
+		         
+		    System.setProperty("webdriver.chrome.driver","C:\\Users\\dkhetam47\\Desktop\\chromedriver\\chromedriver.exe");
+		 
+		      WebDriver driver=new ChromeDriver();
+			
+			
+			 driver.manage().window().maximize();
+			// Instantiate a Date object
+		      Date date = new Date();
+
+		      // display time and date using toString()
+		      System.setOut(o); 
+		      System.out.println(date.toString());
+		        
+		        String[] strUrl = {"http://timesheet.ngenioussolutions.com:9000/actitime/login.do"};
+		        		
+
+                                  
+		        
+		        for(int j = 0; j< strUrl.length; j++)
+		        	
+		        {
+		        	Thread.sleep(9000);
+		          driver.get(strUrl[j]);
+
+			
+			List<WebElement> links=driver.findElements(By.tagName("a"));//We are passing anchor tag, it will get lists of webelement
+			
+			System.out.println("Total links are "+links.size());//For getting total count of links on a page
+			
+			System.out.println("URL" +"-" + strUrl[j]);
+			
+			for(int i=0;i<links.size();i++)
+			{
+				
+				WebElement ele= links.get(i);// since links are lists so we have done get(i), 
+				//on every iteratiion we will get new link and since it is lists of webelement it will always return webelemnt.
+				String url=ele.getAttribute("href");//to get href of URL
+				
+				verifyLinkActive(url);
+				
+			}
+			
+		        }
+			
+		}
+		
+		public static void verifyLinkActive(String linkUrl)
+		{
+	        try 
+	        {
+	           URL url = new URL(linkUrl);//Created the object as URL and passed the linkURL
+	           
+	           HttpURLConnection httpURLConnect=(HttpURLConnection)url.openConnection();//Using URL object we are creating connection(open connection) and it will return connection of httpurlconnectiona and store in object url 
+			   
+	           
+			   httpURLConnect.setConnectTimeout(3000);//If we dont get response will throw timeout exception after 3 sec
+	         // string notReach = httpURLConnect.setConnectTimeout(3000);//If we dont get response will throw timeout exception after 3 sec
+	          			   
+			   
+	           httpURLConnect.connect();//connect with object
+	           
+	           if(httpURLConnect.getResponseCode()==200)// HTTP/1.0 200 OK and HTTP/1.0 401 Unauthorized
+
+	           {
+	           //    System.out.println(linkUrl+" , "+httpURLConnect.getResponseMessage());//Print the link and message as OK
+	            }
+	           else if(httpURLConnect.getResponseCode()!=200) 
+	           {
+	         	  System.out.println(linkUrl+" , "+httpURLConnect.getResponseMessage());  
+	           }
+	           
+	        } catch (Exception e) {
+	        	
+	        }
+	        
+	       
+	    } 
+
+			
+	     }
+		
+			
